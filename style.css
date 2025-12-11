@@ -1,0 +1,14 @@
+:root{
+  --card-radius:18px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Poppins",sans-serif;
+  background: linear-gradient(90deg,#ff9a9e,#fad0c4,#fbc2eb,#a6c1ee);
+  background-size:400% 400%;
+  animation: rainbowBG 18s ease infinite;
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+}
+/* ... rest of your CSS from <style> ... */
