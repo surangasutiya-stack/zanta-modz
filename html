@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZANTA FANS — Super Cute Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;font-family:'Poppins',sans-serif;margin:0;padding:0;}
+body{background:linear-gradient(90deg,#ff9a9e,#fad0c4,#fbc2eb,#a6c1ee);background-size:400% 400%;animation:rainbowBG 18s ease infinite;color:#fff;}
+@keyframes rainbowBG{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
+.container{max-width:900px;margin:20px auto;padding:20px;background:rgba(0,0,0,0.2);border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.4);}
+h2{text-align:center;margin-bottom:16px;background:linear-gradient(90deg,#ff6a00,#ee0979,#fbc2eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:floatRainbow 6s linear infinite;}
+@keyframes floatRainbow{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
+input[type=text],input[type=password],input[type=file]{width:100%;padding:10px;margin:8px 0;border-radius:12px;border:none;outline:none;}
+button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:12px;background:linear-gradient(45deg,#ff9a9e,#fbc2eb,#a6c1ee);color:#fff;font-weight:700;cursor:pointer;transition:all .2s;}
+button:hover{transform:scale(1.05) rotate(-1deg);box-shadow:0 8px 25px rgba(255,192,203,0.4);}
+#avatarPreview{width:80px;height:80px;border-radius:50%;background:linear-gradient(45deg,#ff9a9e,#fbc2eb);margin:10px auto;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#avatarPreview img{width:100%;height:100%;object-fit:cover;}
+.switch-link{text-align:center;margin-top:10px;font-size:14px;cursor:pointer;color:#fff;text-decoration:underline;}
+.post-card{background:rgba(255,255,255,0.05);padding:12px;margin:12px 0;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,0.2);transition:all .3s;position:relative;}
+.post-card:hover{box-shadow:0 12px 30px rgba(255,182,193,0.3);animation:sparkle 1s;}
+@keyframes sparkle{0%{box-shadow:0 12px 30px rgba(255,182,193,0.3)}50%{box-shadow:0 15px 40px rgba(255,255,255,0.6)}100%{box-shadow:0 12px 30px rgba(255,182,193,0.3)}}
+.post-hero{display:flex;align-items:center;gap:12px;margin-top:6px;}
+.post-hero img{width:60px;height:60px;border-radius:50%;border:2px solid #fff;transition:transform .3s;}
+.post-hero img:hover{transform:scale(1.2) rotate(-5deg);}
+.react-container span{cursor:pointer;margin-right:6px;font-size:20px;transition:all .2s;}
+.react-container span:hover{transform:scale(1.5) rotate(-10deg);}
+.react-badge{background:rgba(0,0,0,0.3);border-radius:12px;padding:2px 6px;margin-left:4px;font-size:12px;}
+.comment-box input{width:60%;padding:6px;border-radius:12px;border:none;outline:none;}
+.comment-box input.pwd{width:35%;}
+.comment-box button{padding:6px 10px;border-radius:12px;border:none;background:linear-gradient(45deg,#fbc2eb,#a6c1ee,#ff9a9e);color:#fff;font-weight:700;}
+.comment-list{margin-top:8px;transition:all .3s;}
+.comment-item{display:flex;justify-content:space-between;gap:8px;background:rgba(255,255,255,0.1);padding:6px;border-radius:10px;margin-top:4px;align-items:center;transition:all .3s;}
+.comment-item:hover{background:rgba(255,255,255,0.2);}
+.comment-actions button{padding:4px 6px;border-radius:10px;border:none;background:linear-gradient(45deg,#fbc2eb,#a6c1ee);color:#fff;font-weight:700;margin-left:4px;cursor:pointer;font-size:12px;}
+.media-card{padding:12px;border-radius:16px;background:linear-gradient(45deg,#fff2f7,#fbe8ff,#e9f2ff);color:#222;box-shadow:0 10px 30px rgba(0,0,0,0.12);margin:12px 0;}
+.media-card h3{text-align:center;margin:0 0 6px 0;font-size:16px;}
+.media-controls{display:flex;gap:6px;justify-content:center;margin-top:6px;}
+.media-controls button{padding:6px 10px;border-radius:12px;border:none;background:linear-gradient(45deg,#ff9a9e,#fbc2eb,#a6c1ee);color:#fff;font-weight:700;cursor:pointer;}
+.yt-input{width:90%;padding:6px;border-radius:10px;border:none;display:block;margin:6px auto;outline:none;}
+.yt-frame{border-radius:12px;overflow:hidden;background:#000;padding:6px;margin-top:6px;}
+/* Floating hearts animation for emoji click */
+.heart{position:absolute;width:20px;height:20px;animation:floatHeart 1s ease-out forwards;}
+@keyframes floatHeart{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-40px) scale(1.5);}}
+</style>
+</head>
+<body>
+<div class="container" id="authContainer"></div>
+<script>
+// --- Owner + users ---
+const OWNER={name:"ZANTA Owner",waPhone:"94760264995"};
+let currentUser=null,posts=[];
+function setCurrentUser(u){currentUser=u;}
+function getUsers(){return JSON.parse(localStorage.getItem("users")||"[]");}
+function saveUsers(users){localStorage.setItem("users",JSON.stringify(users));}
+
+// --- Register/Login ---
+function renderRegister(){
+  const html=`<h2>Register</h2>
+  <div id="avatarPreview">Avatar</div>
+  <input type="file" id="regAvatar" accept="image/*">
+  <input type="text" id="regName" placeholder="Username">
+  <input type="text" id="regPhone" placeholder="Phone Number">
+  <input type="password" id="regPass" placeholder="Password">
+  <button onclick="registerUser()">Register</button>
+  <div class="switch-link" onclick="renderLogin()">Already have account? Login</div>`;
+  document.getElementById("authContainer").innerHTML=html;
+  document.getElementById("regAvatar").addEventListener("change",previewAvatar);
+}
+function previewAvatar(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{document.getElementById("avatarPreview").innerHTML=`<img src="${ev.target.result}">`;};reader.readAsDataURL(file);}
+function registerUser(){const name=document.getElementById("regName").value.trim();const phone=document.getElementById("regPhone").value.trim();const pass=document.getElementById("regPass").value.trim();const avatarInput=document.getElementById("regAvatar");if(!name||!phone||!pass||!avatarInput.files[0]){alert("Fill all fields");return;}const reader=new FileReader();reader.onload=e=>{const users=getUsers();if(users.find(u=>u.phone===phone)){alert("Phone already registered!");return;}const newUser={username:name,phone,pass,avatar:e.target.result};users.push(newUser);saveUsers(users);alert("Registered!");renderLogin();};reader.readAsDataURL(avatarInput.files[0]);}
+function renderLogin(){const html=`<h2>Login</h2><input type="text" id="loginPhone" placeholder="Phone Number"><input type="password" id="loginPass" placeholder="Password"><button onclick="loginUser()">Login</button><div class="switch-link" onclick="renderRegister()">Don't have account? Register</div>`;document.getElementById("authContainer").innerHTML=html;}
+function loginUser(){const phone=document.getElementById("loginPhone").value.trim();const pass=document.getElementById("loginPass").value.trim();const users=getUsers();const user=users.find(u=>u.phone===phone&&u.pass===pass);if(!user){alert("Wrong credentials");return;}setCurrentUser(user);renderDashboard();}
+function logoutUser(){currentUser=null;renderLogin();}
+function messageOwner(){if(!currentUser)return;const msg=encodeURIComponent(`Hello ${OWNER.name}, this is ${currentUser.username}. Phone: ${currentUser.phone}`);window.open(`https://wa.me/${OWNER.waPhone}?text=${msg}`,"_blank");}
+
+// --- Posts ---
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);}
+function renderPosts(){const c=document.getElementById("postsContainer");if(!c)return;c.innerHTML="";posts.forEach(p=>{if(!p.comments)p.comments=[];if(!p.react)p.react={};const div=document.createElement("div");div.className="post-card";let reactHtml=Object.keys(p.react).map(e=>`${e}<span class="react-badge">${p.react[e]}</span>`).join(" ");div.innerHTML=`<div>${escapeHtml(p.title)} <span style="font-size:12px;color:#ccc">by ${escapeHtml(p.username)}</span></div>
+<div class="post-hero"><img src="${p.avatar}" alt="avatar"></div>
+<div class="react-container" id="reactContainer${p.id}">${reactHtml}</div>
+<div style="margin-top:6px;"><button onclick="editPost(${p.id})">Edit</button><button onclick="deletePost(${p.id})">Delete</button></div>
+<div class="comment-box"><input id="commentInput${p.id}" placeholder="Comment text"><input class="pwd" id="commentPass${p.id}" type="password" placeholder="Password"><button onclick="addComment(${p.id})">Comment</button><div class="comment-list" id="commentContainer${p.id}"></div></div>`;c.appendChild(div);renderComments(p.id);showReact(p.id);});}
+function uploadPost(){const title=document.getElementById("postTitle").value.trim();const file=document.getElementById("postImage").files[0];const password=document.getElementById("postPass")?document.getElementById("postPass").value.trim():"";if(!title||!file||!password){alert("Fill title, choose image and set password");return;}const reader=new FileReader();reader.onload=e=>{const newPost={id:Date.now(),username:currentUser.username,avatar:currentUser.avatar,title,comments:[],react:{},password};posts.unshift(newPost);renderPosts();document.getElementById("postTitle").value="";document.getElementById("postImage").value="";if(document.getElementById("postPass")) document.getElementById("postPass").value="";};reader.readAsDataURL(file);}
+function editPost(id){const post=posts.find(p=>p.id===id);if(!post)return;const pass=prompt("Enter post password to edit:");if(pass!==post.password){alert("Wrong password");return;}const newTitle=prompt("New title:",post.title);if(!newTitle)return;const newImg=prompt("New image URL (optional):","");post.title=newTitle.trim();if(newImg)post.avatar=newImg;renderPosts();}
+function deletePost(id){const post=posts.find(p=>p.id===id);if(!post)return;const pass=prompt("Enter post password to delete:");if(pass!==post.password){alert("Wrong password");return;}if(!confirm("Delete this post?"))return;posts=posts.filter(p=>p.id!==id);renderPosts();}
+function showReact(id){const c=document.getElementById("reactContainer"+id);if(!c)return;const emojis=["👍","😍","😂","👏","🎉"];emojis.forEach(e=>{const span=document.createElement("span");span.innerText=e;span.onclick=ev=>{const p=posts.find(p=>p.id===id);if(!p.react)p.react={};p.react[e]=(p.react[e]||0)+1;renderPosts();createHeart(ev.pageX,ev.pageY);};c.appendChild(span);});}
+function createHeart(x,y){const heart=document.createElement("div");heart.className="heart";heart.style.left=x+"px";heart.style.top=y+"px";heart.innerHTML="❤️";document.body.appendChild(heart);setTimeout(()=>{heart.remove();},1000);}
+function renderComments(postId){const container=document.getElementById("commentContainer"+postId);const post=posts.find(p=>p.id===postId);if(!container||!post)return;container.innerHTML=post.comments.map((cm,i)=>`<div class="comment-item"><span>${escapeHtml(cm.text)}</span><div><button class="comment-actions" onclick="replyComment(${postId},${i})">Reply</button><button class="comment-actions" onclick="deleteComment(${postId},${i})">Delete</button></div></div>`).join("");}
+function addComment(postId){const textInput=document.getElementById("commentInput"+postId);const passInput=document.getElementById("commentPass"+postId);if(!textInput.value.trim()||!passInput.value.trim()){alert("Enter text and password");return;}const post=posts.find(p=>p.id===postId);post.comments.push({text:textInput.value.trim(),password:passInput.value.trim()});textInput.value="";passInput.value="";renderComments(postId);}
+function replyComment(postId,index){const reply=prompt("Reply:");if(!reply)return;const pass=prompt("Enter password for this reply:");if(!pass)return;const post=posts.find(p=>p.id===postId);post.comments.splice(index+1,0,{text:"↳ "+reply,password:pass});renderComments(postId);}
+function deleteComment(postId,index){const post=posts.find(p=>p.id===postId);const pass=prompt("Enter password to delete comment:");if(pass!==post.comments[index].password){alert("Wrong password");return;}post.comments.splice(index,1);renderComments(postId);}
+
+// --- Dashboard ---
+function renderDashboard(){
+  const html=`<h2>Welcome, ${currentUser.username}</h2><div id="avatarPreview">${currentUser.avatar?`<img src="${currentUser.avatar}">`:"Avatar"}</div><div style="text-align:center;">Phone: ${currentUser.phone}</div>
+<button onclick="messageOwner()">Message Owner on WhatsApp</button>
+<button onclick="logoutUser()">Logout</button>
+<h2>Create Post</h2>
+<input type="text" id="postTitle" placeholder="Post title">
+<input type="file" id="postImage" accept="image/*">
+<input type="password" id="postPass" placeholder="Set post password">
+<button onclick="uploadPost()">Upload Post</button>
+<div id="postsContainer"></div>
+<div class="media-card"><h3>MP3 Player</h3><div class="media-controls">
+<button onclick="playTrack(0)">Track 1</button><button onclick="playTrack(1)">Track 2</button><button onclick="playTrack(2)">Track 3</button><button onclick="stopMusic()">Stop</button></div></div>
+<div class="media-card"><h3>YouTube (RGB)</h3><input id="ytLink" class="yt-input" placeholder="Paste YouTube link"><div class="media-controls"><button onclick="playYouTube()">Play</button><button onclick="stopYouTube()">Stop</button></div><div class="yt-frame" id="ytContainer"></div></div>`;
+  document.getElementById("authContainer").innerHTML=html;
+  renderPosts();
+}
+
+// --- Media ---
+const tracks=["https://files.catbox.moe/nikhyp.mp3","https://files.catbox.moe/rl4o8d.mp3","https://files.catbox.moe/s96h32.mp3"];
+let audio=new Audio();
+function playTrack(i){if(tracks[i]){audio.src=tracks[i];audio.play();}}
+function stopMusic(){audio.pause();audio.currentTime=0;}
+function getVideoID(url){if(!url)return null;const patterns=[/youtu\.be\/([A-Za-z0-9_-]{11})/,/v=([A-Za-z0-9_-]{11})/,/embed\/([A-Za-z0-9_-]{11})/,/youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/];for(const r of patterns){const m=url.match(r);if(m&&m[1])return m[1];}const fallback=url.match(/([A-Za-z0-9_-]{11})$/);return fallback?fallback[1]:null;}
+function playYouTube(){const l=(document.getElementById("ytLink")||{}).value||"";const id=getVideoID(l.trim());if(!id){alert("Invalid YouTube link");return;}document.getElementById("ytContainer").innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;}
+function stopYouTube(){document.getElementById("ytContainer").innerHTML="";}
+
+// --- Init ---
+renderRegister();
+</script>
+</body>
+</html>
