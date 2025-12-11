@@ -1,0 +1,7 @@
+zanta-fans/
+├── index.html        ← main HTML
+├── style.css         ← CSS code (from <style> block)
+├── script.js         ← JS code (from <script> block)
+└── assets/
+    ├── img/          ← optional images
+    └── mp3/          ← optional mp3 files
